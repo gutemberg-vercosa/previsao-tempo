@@ -50,9 +50,9 @@ describe('montarPrevisao', () => {
 
 describe('condicao', () => {
   it('usa o ícone da noite quando existe', () => {
-    expect(condicao(0, true)).toEqual({ texto: 'Céu limpo', icone: '☀️', clima: 'limpo' });
-    expect(condicao(0, false).icone).toBe('🌙');
-    expect(condicao(3, false).icone).toBe('☁️');
+    expect(condicao(0, true)).toEqual({ texto: 'Céu limpo', icone: 'sol', clima: 'limpo' });
+    expect(condicao(0, false).icone).toBe('lua');
+    expect(condicao(3, false).icone).toBe('nuvem');
   });
 
   it('tem um padrão para códigos desconhecidos', () => {

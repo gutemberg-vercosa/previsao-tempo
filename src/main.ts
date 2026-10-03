@@ -32,6 +32,7 @@ let favoritos = ler<Cidade[]>('favoritos', []);
 const mesma = (a: Cidade, b: Cidade) => a.lat === b.lat && a.lon === b.lon;
 const graus = (t: number) => `${Math.round(t)}°`;
 const hora = (iso: string) => iso.slice(11, 16);
+const svg = (icone: string) => `<svg class="ic" aria-hidden="true"><use href="#i-${icone}"/></svg>`;
 
 function nomeDia(data: string, i: number) {
   if (i === 0) return 'Hoje';
@@ -87,7 +88,7 @@ function mostrar(p: Previsao) {
   const hoje = p.dias[0];
   document.body.dataset.clima = agora.clima;
   document.body.dataset.periodo = p.dia ? 'dia' : 'noite';
-  $('icone').textContent = agora.icone;
+  $('icone').innerHTML = svg(agora.icone);
   $('temp').textContent = graus(p.temp);
   $('condicao').textContent = agora.texto;
   $('extremos').textContent = `Máx. ${graus(hoje.max)} · Mín. ${graus(hoje.min)}`;
@@ -110,11 +111,11 @@ function mostrarHoras({ horas }: Previsao) {
   grade.style.gridTemplateColumns = `repeat(${horas.length}, ${COLUNA}px)`;
   grade.innerHTML = `
     ${horas.map((h, i) => `<span class="hora">${i ? hora(h.hora).slice(0, 2) + 'h' : 'Agora'}</span>`).join('')}
-    ${horas.map((h) => `<span class="icone-hora">${condicao(h.codigo, h.dia).icone}</span>`).join('')}
+    ${horas.map((h) => `<span class="icone-hora">${svg(condicao(h.codigo, h.dia).icone)}</span>`).join('')}
     <svg class="curva" width="${largura}" height="${ALTURA}" viewBox="0 0 ${largura} ${ALTURA}" aria-hidden="true">
       <path d="${caminho(pts)}"/>${rotulos}
     </svg>
-    ${horas.map((h) => `<span class="chance">${h.chuva >= 20 ? `💧${h.chuva}%` : ''}</span>`).join('')}`;
+    ${horas.map((h) => `<span class="chance">${h.chuva >= 20 ? `${h.chuva}%` : ''}</span>`).join('')}`;
   grade.parentElement!.setAttribute('aria-label', `Previsão hora a hora: ${horas
     .map((h) => `${hora(h.hora)}, ${graus(h.temp)}, ${condicao(h.codigo, h.dia).texto}`)
     .join('; ')}`);
@@ -128,7 +129,7 @@ function mostrarDias({ dias }: Previsao) {
     const { inicio, largura } = faixa(d.min, d.max, minSemana, maxSemana);
     return `<li>
       <span class="dia">${nomeDia(d.data, i)}</span>
-      <span class="icone-dia" title="${texto}">${icone}<small>${d.chuva >= 20 ? `${d.chuva}%` : ''}</small></span>
+      <span class="icone-dia" title="${texto}">${svg(icone)}<small>${d.chuva >= 20 ? `${d.chuva}%` : ''}</small></span>
       <span class="min">${graus(d.min)}</span>
       <span class="barra" aria-hidden="true"><i style="left:${inicio}%;width:${largura}%"></i></span>
       <span class="max">${graus(d.max)}</span>

@@ -9,6 +9,19 @@
   <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <!-- Ícones do tempo, chapados e sem contorno -->
+    <symbol id="i-sol" viewBox="0 0 32 32"><g stroke="#ffd60a" stroke-width="2.4" stroke-linecap="round"><path d="M16 2.5v3.5M16 26v3.5M2.5 16H6M26 16h3.5M6.5 6.5l2.4 2.4M23.1 23.1l2.4 2.4M6.5 25.5l2.4-2.4M23.1 8.9l2.4-2.4"/></g><circle cx="16" cy="16" r="6.5" fill="#ffd60a"/></symbol>
+    <symbol id="i-lua" viewBox="0 0 32 32"><path d="M19 4.5a11.5 11.5 0 1 0 8.5 17.6A9.5 9.5 0 0 1 19 4.5Z" fill="#f2efd9"/></symbol>
+    <symbol id="i-nuvem" viewBox="0 0 32 32"><path d="M9.5 26h14a6.5 6.5 0 0 0 .6-13A8.5 8.5 0 0 0 8.2 15.6 5.3 5.3 0 0 0 9.5 26Z" fill="#fff"/></symbol>
+    <symbol id="i-sol-nuvem" viewBox="0 0 32 32"><use href="#i-sol" width="22" height="22"/><use href="#i-nuvem" x="4" y="4" width="28" height="28"/></symbol>
+    <symbol id="i-lua-nuvem" viewBox="0 0 32 32"><use href="#i-lua" width="20" height="20"/><use href="#i-nuvem" x="4" y="4" width="28" height="28"/></symbol>
+    <symbol id="i-neblina" viewBox="0 0 32 32"><use href="#i-nuvem" y="-5" width="32" height="32" opacity=".85"/><path d="M6 25h20M9 29h14" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></symbol>
+    <symbol id="i-chuva" viewBox="0 0 32 32"><use href="#i-nuvem" y="-6" width="32" height="32"/><path d="M11 23.5l-1.5 4M17 23.5l-1.5 4M23 23.5l-1.5 4" stroke="#5ac8fa" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-sol-chuva" viewBox="0 0 32 32"><use href="#i-sol" width="20" height="20"/><use href="#i-chuva" x="3" y="2" width="29" height="29"/></symbol>
+    <symbol id="i-neve" viewBox="0 0 32 32"><use href="#i-nuvem" y="-6" width="32" height="32"/><g fill="#fff"><circle cx="10.5" cy="25" r="1.6"/><circle cx="16" cy="28" r="1.6"/><circle cx="21.5" cy="25" r="1.6"/></g></symbol>
+    <symbol id="i-trovoada" viewBox="0 0 32 32"><use href="#i-nuvem" y="-6" width="32" height="32"/><path d="M17.5 19 12 26.5h4.2l-1.7 5 6.5-8h-4.3l2.3-4.5Z" fill="#ffd60a"/></symbol>
+  </svg>
   <main>
     <header>
       <div>
@@ -51,6 +64,8 @@
           <div class="painel"><h3>Nascer do sol</h3><b id="nascer">–</b></div>
           <div class="painel"><h3>Pôr do sol</h3><b id="por">–</b></div>
         </section>
+
+        <footer>Dados: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Favoritas e última consulta ficam salvas só no seu navegador.</footer>
       </div>
 
       <div class="coluna">
@@ -69,8 +84,6 @@
         </section>
       </div>
     </div>
-
-    <footer>Dados: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Favoritas e última consulta ficam salvas só no seu navegador.</footer>
   </main>
 
   <script type="module" src="/src/main.ts"></script>

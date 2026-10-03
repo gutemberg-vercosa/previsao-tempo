@@ -110,7 +110,8 @@ header { display: grid; gap: 16px; margin-bottom: 12px; }
 .regiao { margin: 2px 0 0; color: var(--suave); font-size: .9rem; }
 .favoritar { flex: none; font-size: 1.6rem; line-height: 1; padding: 4px; color: #ffd60a; }
 .agora { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-.icone { font-size: 3.6rem; line-height: 1; }
+.icone { font-size: 4.2rem; line-height: 1; }
+.ic { display: block; width: 1em; height: 1em; }
 .temp { font-size: 5.5rem; font-weight: 200; line-height: 1; letter-spacing: -.04em; }
 .condicao { margin: 4px 0 0; font-size: 1.2rem; font-weight: 500; }
 .extremos { margin: 0; color: var(--suave); }
@@ -165,7 +166,7 @@ header { display: grid; gap: 16px; margin-bottom: 12px; }
 .hora { justify-self: stretch; text-align: center; scroll-snap-align: start; }
 .hora { font-size: .85rem; color: var(--suave); }
 .grade .hora:first-child { color: #fff; font-weight: 600; }
-.icone-hora { font-size: 1.4rem; }
+.icone-hora { font-size: 2rem; }
 .curva { grid-column: 1 / -1; overflow: visible; }
 .curva path { fill: none; stroke: #ffd60a; stroke-width: 3; stroke-linecap: round; }
 .curva text { fill: #fff; font-size: 13px; font-weight: 600; text-anchor: middle; }
@@ -185,20 +186,21 @@ header { display: grid; gap: 16px; margin-bottom: 12px; }
 }
 .dias li:first-child { border-top: 0; }
 .dia { font-weight: 500; }
-.icone-dia { display: grid; justify-items: center; font-size: 1.3rem; line-height: 1.1; }
+.icone-dia { display: grid; justify-items: center; font-size: 1.9rem; line-height: 1; }
 .icone-dia small { color: var(--chuva); font-size: .72rem; font-weight: 600; }
 .min { color: var(--suave); text-align: right; }
 .max { font-weight: 500; }
 .barra { position: relative; height: 5px; border-radius: 3px; background: rgb(0 0 0 / .18); }
 .barra i { position: absolute; top: 0; bottom: 0; min-width: 5px; border-radius: 3px; background: linear-gradient(90deg, #5ac8fa, #ffd60a, #ff9f0a); }
 
-footer { margin-top: 24px; color: var(--suave); font-size: .8rem; }
+footer { margin-top: -4px; color: var(--suave); font-size: .8rem; }
 
 @media (min-width: 900px) {
-  main { padding: 32px; }
+  main { display: flex; flex-direction: column; height: 100vh; padding: 32px; }
   header { grid-template-columns: 1fr 360px; align-items: end; }
-  .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: start; }
-  /* As condições de agora ficam paradas; só a coluna da direita acompanha a rolagem. */
-  .layout > .coluna:first-child { position: sticky; top: 24px; }
+  /* A página ocupa a altura da tela: as condições de agora ficam paradas e só a coluna
+     da direita rola, quando não couber. */
+  .layout { flex: 1; min-height: 0; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; }
+  .layout > .coluna:last-child { overflow-y: auto; margin: -4px; padding: 4px; scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .35) transparent; }
   .temp { font-size: 6.5rem; }
 }
