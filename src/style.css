@@ -1,0 +1,163 @@
+/* Inspirado no app Tempo do iPhone: o fundo muda com o tempo e a hora do dia, e os
+   painéis são vidro translúcido sobre ele. Mobile first; a partir de 900px, duas colunas. */
+
+:root {
+  --fundo: linear-gradient(160deg, #3f8edc, #7cb9f0);
+  --vidro: rgb(255 255 255 / .16);
+  --borda: rgb(255 255 255 / .22);
+  --suave: rgb(255 255 255 / .72);
+  --chuva: #8fd3ff;
+  color-scheme: dark;
+}
+
+body[data-clima="nuvens"] { --fundo: linear-gradient(160deg, #5f7590, #93a8bf); }
+body[data-clima="neblina"] { --fundo: linear-gradient(160deg, #6c7a86, #a2adb6); }
+body[data-clima="chuva"] { --fundo: linear-gradient(160deg, #36475b, #61758c); }
+body[data-clima="neve"] { --fundo: linear-gradient(160deg, #6f87a3, #a9bdd3); }
+body[data-clima="trovoada"] { --fundo: linear-gradient(160deg, #262c40, #4d5470); }
+body[data-periodo="noite"] { --fundo: linear-gradient(160deg, #0b1026, #2b3460); }
+body[data-periodo="noite"][data-clima="nuvens"],
+body[data-periodo="noite"][data-clima="neblina"] { --fundo: linear-gradient(160deg, #1a1f2b, #3d4556); }
+body[data-periodo="noite"][data-clima="chuva"],
+body[data-periodo="noite"][data-clima="trovoada"] { --fundo: linear-gradient(160deg, #10141d, #2c3341); }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { background: #2b3460; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fundo) fixed;
+  color: #fff;
+  font: 17px/1.47 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 32px; }
+
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+h1 { margin: 0; font-size: clamp(1.4rem, 6.4vw, 2.2rem); line-height: 1.1; letter-spacing: -.03em; }
+h2 { margin: 0; font-size: 1.6rem; line-height: 1.15; letter-spacing: -.02em; }
+h3 { margin: 0 0 10px; color: var(--suave); font-size: .75rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.sub { margin: 6px 0 0; color: var(--suave); }
+
+.painel {
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--vidro);
+  border: 1px solid var(--borda);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Cabeçalho e busca */
+
+header { display: grid; gap: 16px; margin-bottom: 12px; }
+.busca { position: relative; display: flex; gap: 8px; }
+.busca input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 16px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--vidro);
+  color: #fff;
+  font: inherit;
+}
+.busca input::placeholder { color: var(--suave); }
+.local { flex: none; width: 44px; border: 1px solid var(--borda); border-radius: 12px; background: var(--vidro); }
+.local:hover, .favoritos button:hover { background: rgb(255 255 255 / .26); }
+
+.resultados {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border-radius: 14px;
+  background: rgb(30 34 48 / .92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 12px 32px rgb(0 0 0 / .3);
+}
+.resultados button { display: grid; width: 100%; padding: 8px 10px; border-radius: 10px; text-align: left; }
+.resultados button:hover, .resultados button:focus-visible { background: rgb(255 255 255 / .12); outline: 0; }
+.resultados small, .vazio { color: var(--suave); font-size: .8rem; }
+.vazio { padding: 8px 10px; }
+
+.favoritos { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.favoritos:empty { display: none; }
+.favoritos button { padding: 4px 14px; border-radius: 999px; background: var(--vidro); border: 1px solid var(--borda); font-size: .9rem; }
+.favoritos [aria-current] { background: #fff; color: #1d1d1f; }
+
+/* Agora */
+
+.layout, .coluna { display: grid; gap: 16px; align-content: start; }
+.layout > *, .coluna > * { min-width: 0; }
+
+.atual { padding: 8px 4px 4px; }
+.cidade { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.regiao { margin: 2px 0 0; color: var(--suave); font-size: .9rem; }
+.favoritar { flex: none; font-size: 1.6rem; line-height: 1; padding: 4px; color: #ffd60a; }
+.agora { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.icone { font-size: 3.6rem; line-height: 1; }
+.temp { font-size: 5.5rem; font-weight: 200; line-height: 1; letter-spacing: -.04em; }
+.condicao { margin: 4px 0 0; font-size: 1.2rem; font-weight: 500; }
+.extremos { margin: 0; color: var(--suave); }
+.status { margin: 8px 0 0; color: var(--suave); font-size: .8rem; }
+
+.detalhes { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.detalhes .painel { padding: 12px 14px; }
+.detalhes h3 { margin-bottom: 2px; }
+.detalhes b { font-size: 1.5rem; font-weight: 500; }
+
+/* Hora a hora */
+
+.horas { overflow-x: auto; margin: 0 -16px -8px; padding: 0 16px 8px; scrollbar-width: thin; }
+.grade { display: grid; justify-items: center; row-gap: 4px; font-variant-numeric: tabular-nums; }
+.hora { font-size: .85rem; color: var(--suave); }
+.grade .hora:first-child { color: #fff; font-weight: 600; }
+.icone-hora { font-size: 1.4rem; }
+.curva { grid-column: 1 / -1; overflow: visible; }
+.curva path { fill: none; stroke: #ffd60a; stroke-width: 3; stroke-linecap: round; }
+.curva text { fill: #fff; font-size: 13px; font-weight: 600; text-anchor: middle; }
+.chance { min-height: 1.2em; color: var(--chuva); font-size: .75rem; font-weight: 600; }
+
+/* Próximos dias */
+
+.dias { display: grid; margin: 0; padding: 0; list-style: none; }
+.dias li {
+  display: grid;
+  grid-template-columns: 3.4em 3em 2.4em 1fr 2.4em;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--borda);
+  font-variant-numeric: tabular-nums;
+}
+.dias li:first-child { border-top: 0; }
+.dia { font-weight: 500; }
+.icone-dia { display: grid; justify-items: center; font-size: 1.3rem; line-height: 1.1; }
+.icone-dia small { color: var(--chuva); font-size: .72rem; font-weight: 600; }
+.min { color: var(--suave); text-align: right; }
+.max { font-weight: 500; }
+.barra { position: relative; height: 5px; border-radius: 3px; background: rgb(0 0 0 / .18); }
+.barra i { position: absolute; top: 0; bottom: 0; min-width: 5px; border-radius: 3px; background: linear-gradient(90deg, #5ac8fa, #ffd60a, #ff9f0a); }
+
+footer { margin-top: 24px; color: var(--suave); font-size: .8rem; }
+
+@media (min-width: 900px) {
+  main { padding: 32px; }
+  header { grid-template-columns: 1fr 360px; align-items: end; }
+  .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; }
+  .temp { font-size: 6.5rem; }
+}

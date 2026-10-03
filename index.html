@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Previsão do Tempo</title>
+  <meta name="description" content="Previsão do tempo de qualquer cidade, hora a hora e para os próximos 7 dias, com dados abertos da Open-Meteo.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛅</text></svg>">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Previsão do Tempo</h1>
+        <p class="sub">Qualquer cidade do mundo, hora a hora e para os próximos 7 dias.</p>
+      </div>
+      <div class="busca">
+        <input id="busca" type="search" placeholder="Buscar cidade" autocomplete="off" aria-label="Buscar cidade" aria-controls="resultados">
+        <button type="button" id="local" class="local" aria-label="Usar minha localização" title="Usar minha localização">📍</button>
+        <ul id="resultados" class="resultados" hidden></ul>
+      </div>
+    </header>
+
+    <nav id="favoritos" class="favoritos" aria-label="Cidades favoritas"></nav>
+
+    <div class="layout">
+      <div class="coluna">
+        <section class="atual" aria-live="polite">
+          <div class="cidade">
+            <div>
+              <h2 id="cidade">–</h2>
+              <p id="regiao" class="regiao"></p>
+            </div>
+            <button type="button" id="favoritar" class="favoritar" aria-pressed="false" aria-label="Favoritar cidade" title="Favoritar cidade">☆</button>
+          </div>
+          <div class="agora">
+            <span id="icone" class="icone"></span>
+            <strong id="temp" class="temp">–</strong>
+          </div>
+          <p id="condicao" class="condicao"></p>
+          <p id="extremos" class="extremos"></p>
+          <p id="status" class="status"></p>
+        </section>
+
+        <section class="detalhes" aria-label="Detalhes de agora">
+          <div class="painel"><h3>Sensação</h3><b id="sensacao">–</b></div>
+          <div class="painel"><h3>Umidade</h3><b id="umidade">–</b></div>
+          <div class="painel"><h3>Vento</h3><b id="vento">–</b></div>
+          <div class="painel"><h3>Chuva hoje</h3><b id="chuva">–</b></div>
+          <div class="painel"><h3>Nascer do sol</h3><b id="nascer">–</b></div>
+          <div class="painel"><h3>Pôr do sol</h3><b id="por">–</b></div>
+        </section>
+      </div>
+
+      <div class="coluna">
+        <section class="painel">
+          <h3>Próximas 24 horas</h3>
+          <div class="horas" tabindex="0" aria-label="Previsão hora a hora"><div id="horas" class="grade"></div></div>
+        </section>
+
+        <section class="painel">
+          <h3>Próximos 7 dias</h3>
+          <ol id="dias" class="dias"></ol>
+        </section>
+      </div>
+    </div>
+
+    <footer>Dados: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>. Favoritas e última consulta ficam salvas só no seu navegador.</footer>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
