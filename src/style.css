@@ -71,7 +71,8 @@ header { display: grid; gap: 16px; margin-bottom: 12px; }
   font: inherit;
 }
 .busca input::placeholder { color: var(--suave); }
-.local { flex: none; width: 44px; border: 1px solid var(--borda); border-radius: 12px; background: var(--vidro); }
+.local { flex: none; display: grid; place-items: center; width: 44px; border: 1px solid var(--borda); border-radius: 12px; background: var(--vidro); }
+.local svg { fill: currentColor; transform: translate(-1px, 1px); }
 .local:hover, .favoritos button:hover { background: rgb(255 255 255 / .26); }
 
 .resultados {
@@ -122,8 +123,46 @@ header { display: grid; gap: 16px; margin-bottom: 12px; }
 
 /* Hora a hora */
 
-.horas { overflow-x: auto; margin: 0 -16px -8px; padding: 0 16px 8px; scrollbar-width: thin; }
+/* Rolagem sem barra: arrastar (dedo ou mouse) ou usar as setas. As bordas esmaecem
+   do lado em que ainda há horas para ver. */
+.rolagem { position: relative; margin: 0 -16px; }
+.horas {
+  --antes: 0px;
+  --depois: 0px;
+  overflow-x: auto;
+  padding: 0 16px;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 16px;
+  cursor: grab;
+  mask-image: linear-gradient(90deg, transparent, #000 var(--antes), #000 calc(100% - var(--depois)), transparent);
+}
+.horas::-webkit-scrollbar { display: none; }
+.horas.tem-antes { --antes: 48px; }
+.horas.tem-depois { --depois: 48px; }
+.horas.arrastando { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.seta {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / .9);
+  color: #1d1d1f;
+  box-shadow: 0 2px 10px rgb(0 0 0 / .2);
+  transition: opacity .2s;
+}
+.seta svg { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.seta[data-direcao="-1"] { left: 6px; }
+.seta[data-direcao="1"] { right: 6px; }
+.seta:disabled { opacity: 0; pointer-events: none; }
+@media (hover: none) { .seta { display: none; } }
 .grade { display: grid; justify-items: center; row-gap: 4px; font-variant-numeric: tabular-nums; }
+.hora { justify-self: stretch; text-align: center; scroll-snap-align: start; }
 .hora { font-size: .85rem; color: var(--suave); }
 .grade .hora:first-child { color: #fff; font-weight: 600; }
 .icone-hora { font-size: 1.4rem; }
@@ -158,6 +197,8 @@ footer { margin-top: 24px; color: var(--suave); font-size: .8rem; }
 @media (min-width: 900px) {
   main { padding: 32px; }
   header { grid-template-columns: 1fr 360px; align-items: end; }
-  .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; }
+  .layout { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: start; }
+  /* As condições de agora ficam paradas; só a coluna da direita acompanha a rolagem. */
+  .layout > .coluna:first-child { position: sticky; top: 24px; }
   .temp { font-size: 6.5rem; }
 }

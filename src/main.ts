@@ -222,3 +222,37 @@ if (ultima) {
   mostrar(ultima.previsao);
 }
 carregar(cidade);
+
+// Rolagem das próximas horas: setas, arrasto com o mouse e bordas esmaecidas.
+const horasEl = document.querySelector<HTMLElement>('.horas')!;
+const setas = document.querySelectorAll<HTMLButtonElement>('.seta');
+
+function atualizarRolagem() {
+  const fim = horasEl.scrollWidth - horasEl.clientWidth;
+  horasEl.classList.toggle('tem-antes', horasEl.scrollLeft > 1);
+  horasEl.classList.toggle('tem-depois', horasEl.scrollLeft < fim - 1);
+  setas[0].disabled = horasEl.scrollLeft <= 1;
+  setas[1].disabled = horasEl.scrollLeft >= fim - 1;
+}
+horasEl.addEventListener('scroll', atualizarRolagem, { passive: true });
+new ResizeObserver(atualizarRolagem).observe(horasEl.firstElementChild!);
+
+setas.forEach((s) => s.addEventListener('click', () => {
+  horasEl.scrollBy({ left: +s.dataset.direcao! * horasEl.clientWidth * 0.8, behavior: 'smooth' });
+}));
+
+// No toque o navegador já rola sozinho; o arrasto aqui é só para o mouse.
+let arrasto: { x: number; inicio: number } | null = null;
+horasEl.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'mouse') return;
+  arrasto = { x: e.clientX, inicio: horasEl.scrollLeft };
+});
+window.addEventListener('pointermove', (e) => {
+  if (!arrasto) return;
+  horasEl.classList.add('arrastando');
+  horasEl.scrollLeft = arrasto.inicio - (e.clientX - arrasto.x);
+});
+window.addEventListener('pointerup', () => {
+  arrasto = null;
+  horasEl.classList.remove('arrastando');
+});
